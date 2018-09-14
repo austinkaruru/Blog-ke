@@ -13,3 +13,4 @@ bootstrap = Bootstrap(app)
 # app.config.from_object(DevConfig)
 
 from app import views
+from app import errors
