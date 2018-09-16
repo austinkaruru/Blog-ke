@@ -1,9 +1,9 @@
-from flask import render_template, redirect, url_for, request, abort
+from flask import render_template, redirect, url_for, request, abort, flash
 from . import main
-from ..blogs import User
-from .forms import UpdateProfile
+from ..blogs import User, Blog, Comment
+from .forms import UpdateProfile, BlogForm, CommentForm
 from ..import db, photos
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 
 @main.route('/user/<uname>')
@@ -21,6 +21,27 @@ def profile(uname):
 def index():
 
     return render_template('index.html')
+
+
+@main.route('/pitch//new', methods=['GET', 'POST'])
+@login_required
+def new_blog():
+    '''
+       view function that defines the routes decorater for the pitch
+        '''
+
+    form = BlogForm()
+    if form.validate_on_submit():
+        blogs = Blog(title=form.title.data,
+                     body=form.body.data, user_id=current_user.id)
+        db.session.add(blogs)
+        db.session.commit()
+        flash('Your pitch has been created succesfully')
+        return redirect(url_for('main.new_blog'))
+    # title = "Create a Pitch"
+    blogs = Blog.query.all()
+
+    return render_template('new_blog.html', form=form, pitch_list=blogs)
 
 
 @main.route('/user/<uname>/update', methods=['GET', 'POST'])

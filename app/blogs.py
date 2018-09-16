@@ -11,18 +11,37 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-class Blog:
-    all_blogs = []
+class Blog(db.Model):
+    __tablename__ = 'blog'
 
-    # def __init__(self.blog):
-    #     self.blog = blog
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255))
+    body = db.Column(db.String)
+    # Defining the foreign key from the relationship between a user and a pitch
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    # Defining the foreign key from the relationship between a pitch and a category
 
-    def save_blog(self):
-        Blog.all_blogs.append(self)
+    comments = db.relationship(
+        'Comment', cascade="all, delete-orphan", lazy="dynamic")
 
-    @classmethod
-    def clear_blogs(cls):
-        Blog.all_blogs.clear()
+    def __repr__(self):
+        return f'User {self.title}'
+
+
+class Comment(db.Model):
+    __tablename__ = 'comments'
+
+    id = db.Column(db.Integer, primary_key=True)
+    author = db.Column(db.String(255))
+    comment = db.Column(db.String)
+
+    blog_id = db.Column(db.Integer, db.ForeignKey("blog.id"))
+
+    # Defining the foreign key from the relationship between a user and a comment
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+
+    def __repr__(self):
+        return f'Comment {self.comment}'
 
 
 class User(UserMixin, db.Model):
