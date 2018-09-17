@@ -16,15 +16,15 @@ class Config:
 
 class ProdConfig(Config):
 
-    SQLALCHEMY_DATABASE_URI = os.environ.get)("HEROKU_POSTGRESQL_ORANGE_URL")
+    SQLALCHEMY_DATABASE_URI = os.environ.get("HEROKU_POSTGRESQL_ORANGE_URL")
 
 
 class DevConfig(Config):
 
-    DEBUG=True
+    DEBUG = True
 
 
-config_options={
+config_options = {
     'development': DevConfig,
     'production': ProdConfig
 
