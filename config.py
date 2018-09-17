@@ -12,6 +12,7 @@ class Config:
     MAIL_USE_TLS = True
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
+    SECRET_KEY = 2700
 
 
 class ProdConfig(Config):
